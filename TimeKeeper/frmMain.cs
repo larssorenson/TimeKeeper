@@ -611,7 +611,7 @@ namespace TimeKeeper
 		{
 			if (chckChangeOnClick.Checked)
 			{
-				btnChangeChargeCode_Click(sender, e);
+				changeChargeCode();
 			}
 
 		}
