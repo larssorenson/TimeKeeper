@@ -14,6 +14,12 @@ namespace TimeKeeper
 			if (String.IsNullOrEmpty(text))
 				return "00:00:00";
 			int firstColon = text.IndexOf(':');
+
+			if(firstColon == -1)
+			{
+				text = "::" + text;
+			}
+
 			while (firstColon < 2)
 			{
 				firstColon = text.IndexOf(":");
@@ -23,10 +29,16 @@ namespace TimeKeeper
 			}
 
 			int secondColon = 0;
-			while (secondColon != firstColon + 3)
+			do
 			{
 				secondColon = text.IndexOf(':', firstColon + 1);
-				if (secondColon < firstColon + 3)
+
+				if (secondColon == -1)
+				{
+					text += ":";
+				}
+
+				else if (secondColon < firstColon + 3)
 				{
 					text = text.Insert(firstColon + 1, "0");
 				}
@@ -39,6 +51,7 @@ namespace TimeKeeper
 					break;
 
 			}
+			while (secondColon != firstColon + 3);
 
 			while(text.Length < ((firstColon - 2) + 8))
 			{
@@ -50,67 +63,12 @@ namespace TimeKeeper
 		}
 		public static string textTimeIncrement(string time)
 		{
-			var hours = int.Parse(time.Split(':')[0]);
-			var minutes = int.Parse(time.Split(':')[1]);
-			var seconds = int.Parse(time.Split(':')[2]);
-			++seconds;
-			if (seconds == 60)
-			{
-				++minutes;
-				seconds = 0;
-			}
-
-			if (minutes == 60)
-			{
-				++hours;
-				minutes = 0;
-			}
-
-			if (hours == 24)
-			{
-				hours = 0;
-				minutes = 0;
-				seconds = 0;
-			}
-
-			return (hours > 9 ? hours.ToString() : "0" + hours) + ":" + (minutes > 9 ? minutes.ToString() : "0" + minutes) + ":" + (seconds > 9 ? seconds.ToString() : "0" + seconds);
+			return addIntToTime(time, 1);
 		}
 
 		public static string addTimetoTime(string time, string add)
 		{
 			return timeFromInt(intFromTime(time) + intFromTime(add));
-			/*
-			var timeSplit = time.Split(':');
-			var hours = int.Parse(timeSplit[0]);
-			var minutes = int.Parse(timeSplit[1]);
-			var seconds = int.Parse(timeSplit[2]);
-
-			var addSplit = add.Split(':');
-			var hours_to_add = int.Parse(addSplit[0]);
-			var minutes_to_add = int.Parse(addSplit[1]);
-			var seconds_to_add = int.Parse(addSplit[2]);
-
-			seconds += seconds_to_add;
-			if (seconds >= 60)
-			{
-				++minutes;
-				seconds = seconds % 60;
-			}
-
-			minutes += minutes_to_add;
-			if (minutes >= 60)
-			{
-				++hours;
-				minutes = minutes % 60;
-			}
-
-			hours += hours_to_add;
-			if (hours >= 24)
-			{
-				hours = hours % 24;
-			}
-
-			return (hours > 9 ? hours.ToString() : "0" + hours) + ":" + (minutes > 9 ? minutes.ToString() : "0" + minutes) + ":" + (seconds > 9 ? seconds.ToString() : "0" + seconds);*/
 		}
 
 		public static string subIntFromTime(string time, int sub)
@@ -126,37 +84,6 @@ namespace TimeKeeper
 		public static string subTimeFromTime(string time, string sub)
 		{
 			return timeFromInt(intFromTime(time) - intFromTime(sub));
-			/*var timeSplit = time.Split(':');
-			var hours = int.Parse(timeSplit[0]);
-			var minutes = int.Parse(timeSplit[1]);
-			var seconds = int.Parse(timeSplit[2]);
-
-			var addSplit = sub.Split(':');
-			var hours_to_sub = int.Parse(addSplit[0]);
-			var minutes_to_sub = int.Parse(addSplit[1]);
-			var seconds_to_sub = int.Parse(addSplit[2]);
-
-			seconds -= seconds_to_sub;
-			if (seconds < 0)
-			{
-				--minutes;
-				seconds = seconds + 60;
-			}
-
-			minutes -= minutes_to_sub;
-			if (minutes < 0)
-			{
-				--hours;
-				minutes = minutes + 60;
-			}
-
-			hours -= hours_to_sub;
-			if (hours < 0)
-			{
-				hours = hours + 24;
-			}
-
-			return (hours > 9 ? hours.ToString() : "0" + hours) + ":" + (minutes > 9 ? minutes.ToString() : "0" + minutes) + ":" + (seconds > 9 ? seconds.ToString() : "0" + seconds);*/
 		}
 
 		public static void writeToFile(StreamWriter file, List<ChargeCode> lstChargeCodes, bool template)
