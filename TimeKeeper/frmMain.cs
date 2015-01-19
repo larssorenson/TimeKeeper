@@ -219,7 +219,7 @@ namespace TimeKeeper
 
 			currentChargeCode = chargeCodes.Where(x => x.selected == current).FirstOrDefault();
 
-			txtCurrentChargeCode.Text = currentChargeCode.selected.Text ?? "No charge codes!";
+			txtCurrentChargeCode.Text = currentChargeCode.selected.Text.Replace("&&", "&") ?? "No charge codes!";
 		}
 
 		private void btnChangeChargeCode_Click(object sender, EventArgs e)
