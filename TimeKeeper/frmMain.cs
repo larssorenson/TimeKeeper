@@ -34,27 +34,36 @@ namespace TimeKeeper
 		{
 			InitializeComponent();
 
+			// Default time when first loading
 			txtClockedIn.Text = "00:00:00";
+
+			// Auto adjust the height of the window
 			this.Height = this.Height - pnlTime.Location.Y;
 
+			// Initialize our lists and pointer
 			chargeCodes = new List<ChargeCode>();
 			template = new List<ChargeCode>();
 			currentChargeCode = null;
 
+			// Generate the path in which to save settings file and backups
 			path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).Replace("file:\\", "");
 
+			// Read our charge codes from the default file, based on the current date
 			readChargeCodes();
 
+			// Read our settings file, or generate one if it doesn't exist.
 			readSettingsFile();
 			
+			// Align the text boxes, radio buttons, etc. for the charge codes.
 			align();
 
+			// Start our ticker every second
 			tmrSeconds.Start();
 		}
 
 		private void readChargeCodes()
 		{
-
+			// Template file. Holds all charge codes ever encountered for record sake
 			templateFileName = (path + "\\template.csv");
 
 			if (File.Exists(templateFileName))
@@ -101,7 +110,6 @@ namespace TimeKeeper
 
 		private void readSettingsFile()
 		{
-
 			// Settings file read
 			settingsFile = (path + "\\settings.txt");
 			var settingsFileStream = File.Open(settingsFile, FileMode.OpenOrCreate);
