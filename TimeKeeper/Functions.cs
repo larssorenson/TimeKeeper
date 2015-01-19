@@ -92,6 +92,7 @@ namespace TimeKeeper
 			{
 				file.WriteLine("{0},{1},{2}", c.selected.Text.Replace("&&", "&"), c.chargeCode, (template ? 0 : c.time));
 			}
+
 		}
 
 		public static string timeFromInt(int time)
