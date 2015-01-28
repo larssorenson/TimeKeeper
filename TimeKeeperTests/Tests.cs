@@ -90,6 +90,10 @@ namespace TimeKeeperTests
 			test = "10:59:100";
 			result = TimeKeeper.Functions.fixTimeFormat(test);
 			Assert.AreEqual("11:00:40", result);
+
+			test = "10:100:100";
+			result = TimeKeeper.Functions.fixTimeFormat(test);
+			Assert.AreEqual("11:41:40", result);
 		}
 
 		[TestMethod]
