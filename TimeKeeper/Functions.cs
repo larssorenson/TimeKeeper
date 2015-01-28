@@ -63,7 +63,7 @@ namespace TimeKeeper
 				// The desired outcome would be reducing the minutes to two digits, will probably involve some clock mathematics.
 				else if (secondColon > firstColon + 3)
 				{
-					text = text.Insert(secondColon + 1, "0");
+					text = text.Remove(secondColon + 1, "0");
 				}
 				// Base case, our second colon is located exactly 3 places after the first one
 				// meaning we have a format of HH:MM:
@@ -200,11 +200,25 @@ namespace TimeKeeper
 		/// <returns>An integer number of seconds represented by "time".</returns>
 		public static int intFromTime(string time)
 		{
+			int hour = 0, minute = 0, second = 0;
+			if (!time.Contains(":"))
+			{
+				Int32.TryParse(time, out second);
+				return second;
+			}
+		
 			string[] hour_minute_second = time.Split(':');
 
-			int hour = Int32.Parse(hour_minute_second[0]);
-			int minute = Int32.Parse(hour_minute_second[1]);
-			int second = Int32.Parse(hour_minute_second[2]);
+			Int32.TryParse(hour_minute_second[0], out hour);
+			if (hour_minute_second.Length > 1)
+			{
+				Int32.TryParse(hour_minute_second[1], out minute);
+			}
+
+			if (hour_minute_second.Length > 2)
+			{
+				Int32.TryParse(hour_minute_second[2], out second);
+			}
 
 			return (hour * 3600) + (minute * 60) + second;
 		}
