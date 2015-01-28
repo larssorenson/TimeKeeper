@@ -141,6 +141,11 @@ namespace TimeKeeperTests
 			time = "01:00:00";
 			result = TimeKeeper.Functions.subTimeFromTime(time, subtraction);
 			Assert.AreEqual("00:30:00", result);
+
+			subtraction = "00:00:30";
+			time = "00:01:00";
+			result = TimeKeeper.Functions.subTimeFromTime(time, subtraction);
+			Assert.AreEqual("00:00:30", result);
 		}
 
 		[TestMethod]
@@ -173,13 +178,25 @@ namespace TimeKeeperTests
 			string time = "00:30:00";
 			string result = TimeKeeper.Functions.textTimeIncrement(time);
 			Assert.AreEqual("00:30:01", result);
+
+			time = "00:59:59";
+			result = TimeKeeper.Functions.textTimeIncrement(time);
+			Assert.AreEqual("01:00:00", result);
+
+			time = "00:00:59";
+			result = TimeKeeper.Functions.textTimeIncrement(time);
+			Assert.AreEqual("00:01:00", result);
 		}
 
 		[TestMethod]
 		public void TestIntFromTime()
 		{
-			string testTime = "01:00:00"; // 1 hour
+			string testTime = "00:00:00"; // 1 hour
 			int result = TimeKeeper.Functions.intFromTime(testTime);
+			Assert.AreEqual(0, result);
+
+			testTime = "01:00:00"; // 1 hour
+			result = TimeKeeper.Functions.intFromTime(testTime);
 			Assert.AreEqual(3600, result);
 
 			testTime = "02:53:20"; // 2 hours, 53 minutes and 20 seconds
