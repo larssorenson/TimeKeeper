@@ -41,6 +41,7 @@ namespace TimeKeeper
 
 			// Now we move to the second colon for the minutes
 			int secondColon = 0;
+			int hours = 0;
 			do
 			{
 				secondColon = text.IndexOf(':', firstColon + 1);
@@ -59,11 +60,35 @@ namespace TimeKeeper
 					text = text.Insert(firstColon + 1, "0");
 				}
 				// If our colon is farther than we expected
-				// we received HH:MMM:SS or more. Currently, this is not correct. I don't know what I was thinking.
-				// The desired outcome would be reducing the minutes to two digits, will probably involve some clock mathematics.
+				// we received HH:(M*N):SS where N > 2. So we have to convert the minutes to numeric
+				// and add them to the Hours.
 				else if (secondColon > firstColon + 3)
 				{
-					text = text.Remove(secondColon + 1, "0");
+					// If we have HH:(M*N):SS, firstColon = 2, secondColon = firstColon+N+1. We want N, so we subtract firstColon - 1 from secondColon.
+					string strMinutes = text.Substring(firstColon + 1, secondColon - firstColon - 1);
+					int intMinutes;
+					Int32.TryParse(strMinutes, out intMinutes);
+
+					// Now we calculate how many hours we have.
+					while (intMinutes >= 60)
+					{
+						hours++;
+						intMinutes -= 60;
+					}
+
+					// Now we have to restore our minutes back
+					strMinutes = (intMinutes > 9 ? intMinutes.ToString() : "0" + intMinutes.ToString());
+
+					// Before we stitch it all back together, we have to do add our overflow to the hours.
+					string strHours = text.Substring(0, firstColon);
+					int intHours;
+					Int32.TryParse(strHours, out intHours);
+					intHours += hours;
+					strHours = (intHours > 9 ? intHours.ToString() : "0" + intHours.ToString());
+
+					// Now we patch it all back together.
+					text = strHours + ":" + strMinutes + text.Substring(secondColon, text.Length - secondColon);
+
 				}
 				// Base case, our second colon is located exactly 3 places after the first one
 				// meaning we have a format of HH:MM:
@@ -78,6 +103,52 @@ namespace TimeKeeper
 			while(text.Length < ((firstColon - 2) + 8))
 			{
 				text = text.Insert(secondColon + 1, "0");
+			}
+
+			int minutes = 0;
+			hours = 0;
+			// If we have more than 2 digits worth of seconds
+			// We have to calculate overflow seconds into minutes
+			if(text.Length - (secondColon+1) != 2)
+			{
+				// If we have HH:MM:(S*N), secondColon = firstColon+3, and length is secondColon+N. We want N, so we subtract second colon from Length.
+				string strSeconds = text.Substring(secondColon+1, text.Length - (secondColon+1));
+				int intSeconds;
+				Int32.TryParse(strSeconds, out intSeconds);
+
+				// Now we calculate how many minutes we have.
+				while (intSeconds >= 60)
+				{
+					minutes++;
+					intSeconds -= 60;
+				}
+
+				// Now we have to restore our seconds back
+				strSeconds = (intSeconds > 9 ? intSeconds.ToString() : "0" + intSeconds.ToString());
+
+				// Before we stitch it all back together, we have to do add our overflow to the minutes.
+				string strMinutes = text.Substring(firstColon+1, 2);
+				int intMinutes;
+				Int32.TryParse(strMinutes, out intMinutes);
+				intMinutes += minutes;
+
+				while(intMinutes >= 60)
+				{
+					hours++;
+					intMinutes -= 60;
+				}
+
+				strMinutes = (intMinutes > 9 ? intMinutes.ToString() : "0" + intMinutes.ToString());
+
+				// And unfortunately we also have to add any overflow hours.
+				string strHours = text.Substring(0, firstColon);
+				int intHours;
+				Int32.TryParse(strHours, out intHours);
+				intHours += hours;
+				strHours = (intHours > 9 ? intHours.ToString() : "0" + intHours.ToString());
+
+				// Now we patch it all back together.
+				text = strHours + ":" + strMinutes + ":" + strSeconds;
 			}
 
 			return text;
@@ -201,20 +272,26 @@ namespace TimeKeeper
 		public static int intFromTime(string time)
 		{
 			int hour = 0, minute = 0, second = 0;
+			// If there are no colons, assume we've been given seconds
 			if (!time.Contains(":"))
 			{
 				Int32.TryParse(time, out second);
 				return second;
 			}
-		
+			
+			// Otherwise, we can split up the time format HH:MM:SS respectively.
 			string[] hour_minute_second = time.Split(':');
 
+			// We should AT LEAST have the number of hours if we have a colon.
 			Int32.TryParse(hour_minute_second[0], out hour);
+
+			// If we have more than one element, we assume we've been given minutes as well
 			if (hour_minute_second.Length > 1)
 			{
 				Int32.TryParse(hour_minute_second[1], out minute);
 			}
 
+			// If we have yet another element, the last one is seconds.
 			if (hour_minute_second.Length > 2)
 			{
 				Int32.TryParse(hour_minute_second[2], out second);
