@@ -167,11 +167,19 @@ namespace TimeKeeper
 
 			if (clockedIn)
 			{
+				btnClockIn.Enabled = false;
+				btnClockOut.Enabled = true;
 				txtClockedIn.Text = Functions.textTimeIncrement(txtClockedIn.Text);
 				currentChargeCode.time++; 
 				currentChargeCode.timeText.Text = Functions.timeFromInt(currentChargeCode.time);
 				txtCurrentChargeCode.Text = currentChargeCode.selected.Text;
 				saved = false;
+			}
+
+			else if (currentChargeCode != null)
+			{
+				btnClockOut.Enabled = false;
+				btnClockIn.Enabled = true;
 			}
 
 			ticksSinceLastSave++;
@@ -209,15 +217,11 @@ namespace TimeKeeper
 		private void btnClockIn_Click(object sender, EventArgs e)
 		{
 			clockedIn = true;
-			btnClockIn.Enabled = false;
-			btnClockOut.Enabled = true;
 		}
 
 		private void btnClockOut_Click(object sender, EventArgs e)
 		{
 			clockedIn = false;
-			btnClockOut.Enabled = false;
-			btnClockIn.Enabled = true;
 		}
 
 		public void changeChargeCode()
@@ -781,6 +785,7 @@ namespace TimeKeeper
 				writing = false;
 			}
 
+			clockedIn = false;
 			txtClockedIn.Text = "00:00:00";
 			foreach (ChargeCode c in chargeCodes)
 			{
