@@ -57,7 +57,7 @@
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveAndExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.chckChangeOnClick = new System.Windows.Forms.CheckBox();
-			this.btnReset = new System.Windows.Forms.Button();
+			this.btnNewDay = new System.Windows.Forms.Button();
 			this.lblFileName = new System.Windows.Forms.Label();
 			this.txtFileName = new System.Windows.Forms.TextBox();
 			this.menuMain.SuspendLayout();
@@ -305,15 +305,15 @@
 			this.chckChangeOnClick.Text = "Change On Click?";
 			this.chckChangeOnClick.UseVisualStyleBackColor = true;
 			// 
-			// btnReset
+			// btnNewDay
 			// 
-			this.btnReset.Location = new System.Drawing.Point(6, 61);
-			this.btnReset.Name = "btnReset";
-			this.btnReset.Size = new System.Drawing.Size(156, 23);
-			this.btnReset.TabIndex = 3;
-			this.btnReset.Text = "Reset";
-			this.btnReset.UseVisualStyleBackColor = true;
-			this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+			this.btnNewDay.Location = new System.Drawing.Point(6, 61);
+			this.btnNewDay.Name = "btnNewDay";
+			this.btnNewDay.Size = new System.Drawing.Size(156, 23);
+			this.btnNewDay.TabIndex = 3;
+			this.btnNewDay.Text = "New Day";
+			this.btnNewDay.UseVisualStyleBackColor = true;
+			this.btnNewDay.Click += new System.EventHandler(this.btnReset_Click);
 			// 
 			// lblFileName
 			// 
@@ -338,7 +338,7 @@
 			this.ClientSize = new System.Drawing.Size(561, 400);
 			this.Controls.Add(this.txtFileName);
 			this.Controls.Add(this.lblFileName);
-			this.Controls.Add(this.btnReset);
+			this.Controls.Add(this.btnNewDay);
 			this.Controls.Add(this.chckChangeOnClick);
 			this.Controls.Add(this.chckScrollable);
 			this.Controls.Add(this.txtNewChargeCodeName);
@@ -395,7 +395,7 @@
 	private System.Windows.Forms.ToolStripTextBox txtAutoSaveTime;
 	private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
 	private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-	private System.Windows.Forms.Button btnReset;
+	private System.Windows.Forms.Button btnNewDay;
 	private System.Windows.Forms.ToolStripMenuItem saveAndExitToolStripMenuItem;
 	private System.Windows.Forms.Label lblFileName;
 	private System.Windows.Forms.TextBox txtFileName;

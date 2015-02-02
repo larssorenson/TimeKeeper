@@ -199,6 +199,11 @@ namespace TimeKeeper
 
 			}
 
+			if(DateTime.Now.TimeOfDay.TotalSeconds < 1)
+			{
+				newDay();
+			}
+
 		}
 
 		private void btnClockIn_Click(object sender, EventArgs e)
@@ -335,9 +340,6 @@ namespace TimeKeeper
 
 			this.Height += chargeCodeRDO.PreferredSize.Height + 16;
 			this.Width = pnlTime.Width - chargeCodes[0].selected.PreferredSize.Width + TextRenderer.MeasureText(chargeCodes[0].timeText.Text, chargeCodes[0].timeText.Font).Width  + chargeCodes[0].name.PreferredWidth + 5;
-
-			saved = false;
-
 
 			align();
 		}
@@ -763,8 +765,22 @@ namespace TimeKeeper
 			MessageBox.Show("Created by: Lars Sorenson");
 		}
 
-		private void btnReset_Click(object sender, EventArgs e)
+		private void newDay()
 		{
+			if (!writing)
+			{
+				writing = true;
+				using (var fileWriter = new StreamWriter(fileName))
+				{
+					Functions.writeToFile(fileWriter, chargeCodes, false);
+					fileWriter.Close();
+					ticksSinceLastSave = 0;
+					saved = true;
+				}
+
+				writing = false;
+			}
+
 			txtClockedIn.Text = "00:00:00";
 			foreach (ChargeCode c in chargeCodes)
 			{
@@ -774,6 +790,11 @@ namespace TimeKeeper
 
 			fileName = (path + "\\" + DateTime.Today.ToString().Split(' ')[0].Replace('/', '_') + ".csv");
 			txtFileName.Text = fileName;
+		}
+
+		private void btnReset_Click(object sender, EventArgs e)
+		{
+			newDay();
 		}
 
 		private void saveAndExitToolStripMenuItem_Click(object sender, EventArgs e)
